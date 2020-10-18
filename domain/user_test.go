@@ -25,22 +25,25 @@ func TestIfIdIsNotValidUUID(t *testing.T) {
 }
 
 func TestIfNotValidEmail(t *testing.T) {
-	_, err := NewUser("Osvaldo Abel", "wrong.com", "active")
+	_, err := NewUser("Osvaldo Abel", "wrong.com", "active", "Street 1 15-30", "123456")
 	require.Error(t, err)
 }
+
 func TestNewUser(t *testing.T) {
-	_, err := NewUser("Osvaldo Abel", "teste@example.com", "active")
+	_, err := NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
 	require.Nil(t, err)
 }
 
 func TestUpdateUser(t *testing.T) {
-	user, err := NewUser("Osvaldo Abel", "teste@example.com", "active")
+	user, err := NewUser("Osvaldo Abel", "teste@example.com", "active", "Street 1 15-30", "123456")
 	require.Nil(t, err)
 
 	newName := "Osvaldo Abel updated"
 	newEmail := "updated@example.com"
 	newStatus := "inactive"
-	updated, err := user.Update(newName, newEmail, newStatus)
+	newAddress := "UPDATED - Street 1 15-30"
+	newPass := "123456789"
+	updated, err := user.Update(newName, newEmail, newStatus, newAddress, newPass)
 	require.Nil(t, err)
 
 	require.Equal(t, updated.ID, user.ID)
@@ -48,5 +51,6 @@ func TestUpdateUser(t *testing.T) {
 	require.Equal(t, newName, user.Name)
 	require.Equal(t, newEmail, user.Email)
 	require.Equal(t, newStatus, user.Status)
+	require.Equal(t, newAddress, user.Address)
 	require.NotEqual(t, updated.CreatedAt, updated.UpdatedAt)
 }

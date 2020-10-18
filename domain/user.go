@@ -14,6 +14,8 @@ type User struct {
 	Name      string    `valid:"notnull"`
 	Email     string    `valid:"notnull"`
 	Status    string    `valid:"notnull"`
+	Password  string    `valid:"-"`
+	Address   string    `valid:"-"`
 	UpdatedAt time.Time `valid:"-"`
 	CreatedAt time.Time `valid:"-"`
 }
@@ -53,13 +55,15 @@ func (user *User) Validate() error {
 	Description: Creates new user
 	Return: User|error
 **/
-func NewUser(name string, email string, status string) (*User, error) {
+func NewUser(name string, email string, status string, address string, password string) (*User, error) {
 	user := &User{}
 	user.prepare()
 
 	user.Name = name
 	user.Email = email
 	user.Status = status
+	user.Address = address
+	user.Password = password
 
 	err := user.Validate()
 
@@ -74,11 +78,13 @@ func NewUser(name string, email string, status string) (*User, error) {
 	Description: Update a User
 	Return: User|error
 **/
-func (user *User) Update(name string, email string, status string) (*User, error) {
+func (user *User) Update(name string, email string, status string, address string, password string) (*User, error) {
 
 	user.Name = name
 	user.Email = email
 	user.Status = status
+	user.Address = address
+	user.Password = password
 	user.UpdatedAt = time.Now()
 
 	err := user.Validate()

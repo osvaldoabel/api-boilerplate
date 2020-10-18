@@ -23,11 +23,13 @@ func IsValidEmail(email string) bool {
 		and prints it in a pretty way
 	Return: void
 **/
-func Dd(variable interface{}) {
+func Dd(variable interface{}, die bool) {
 	res, _ := json.MarshalIndent(variable, "", "  ")
 
 	fmt.Println("= = = = = = = = = = = =")
 	fmt.Println(string(res))
 	fmt.Println("= = = = = = = = = = = =")
-	os.Exit(1)
+	if die {
+		os.Exit(1)
+	}
 }
