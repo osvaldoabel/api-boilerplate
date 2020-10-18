@@ -69,3 +69,23 @@ func NewUser(name string, email string, status string) (*User, error) {
 
 	return user, nil
 }
+
+/**
+	Description: Update a User
+	Return: User|error
+**/
+func (user *User) Update(name string, email string, status string) (*User, error) {
+
+	user.Name = name
+	user.Email = email
+	user.Status = status
+	user.UpdatedAt = time.Now()
+
+	err := user.Validate()
+
+	if err != nil {
+		return &User{}, err
+	}
+
+	return user, nil
+}
