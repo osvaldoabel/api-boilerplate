@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"fmt"
-	"osvaldoabel/users-api/domain"
+	"osvaldoabel/users-api/src/domain"
 
 	"github.com/jinzhu/gorm"
 )

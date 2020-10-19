@@ -3,7 +3,7 @@ package database
 import (
 	"log"
 	"os"
-	"osvaldoabel/users-api/domain"
+	"osvaldoabel/users-api/src/domain"
 	"strconv"
 
 	"github.com/jinzhu/gorm"
@@ -23,7 +23,7 @@ type Database struct {
 }
 
 func init() {
-	godotenv.Load("./../.env")
+	godotenv.Load("./../../.env")
 }
 
 func NewDb() *Database {
