@@ -1,10 +1,10 @@
 package services_test
 
 import (
-	"osvaldoabel/users-api/domain"
-	"osvaldoabel/users-api/framework/database"
-	"osvaldoabel/users-api/repositories"
-	"osvaldoabel/users-api/services"
+	"osvaldoabel/users-api/src/domain"
+	"osvaldoabel/users-api/src/repositories"
+	"osvaldoabel/users-api/src/services"
+	"osvaldoabel/users-api/utils/database"
 	"testing"
 
 	"github.com/stretchr/testify/require"

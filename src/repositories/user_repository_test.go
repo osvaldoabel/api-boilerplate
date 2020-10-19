@@ -1,9 +1,9 @@
 package repositories_test
 
 import (
-	"osvaldoabel/users-api/domain"
-	database "osvaldoabel/users-api/framework/database"
-	"osvaldoabel/users-api/repositories"
+	"osvaldoabel/users-api/src/domain"
+	"osvaldoabel/users-api/src/repositories"
+	database "osvaldoabel/users-api/utils/database"
 	"testing"
 
 	"github.com/stretchr/testify/require"

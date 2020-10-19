@@ -1,8 +1,8 @@
 package services
 
 import (
-	"osvaldoabel/users-api/domain"
-	"osvaldoabel/users-api/repositories"
+	"osvaldoabel/users-api/src/domain"
+	"osvaldoabel/users-api/src/repositories"
 )
 
 type UserService struct {
