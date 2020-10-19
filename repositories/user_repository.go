@@ -70,3 +70,14 @@ func (repository *UserRepositoryDb) Find(id string) (*domain.User, error) {
 
 	return &user, nil
 }
+
+func (repository *UserRepositoryDb) Delete(id string) error {
+	var user domain.User
+	result := repository.Db.Preload("user").Delete(&user, "id = ?", id)
+
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("This user doesn't exist")
+	}
+
+	return nil
+}

@@ -51,3 +51,19 @@ func TestUserRepositoryDbUpdate(t *testing.T) {
 	require.NotEqual(t, updated.Email, user.Email)
 	require.NotEqual(t, updated.Address, user.Address)
 }
+
+func TestUserRepositoryDbDelete(t *testing.T) {
+
+	db := database.NewDbTest()
+	defer db.Close()
+
+	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	require.Nil(t, err)
+
+	repo := repositories.NewUserRepository(db)
+	user, err = repo.Insert(user)
+	require.Nil(t, err)
+
+	err = repo.Delete(user.ID)
+	require.Nil(t, err)
+}
