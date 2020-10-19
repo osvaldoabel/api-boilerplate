@@ -11,6 +11,7 @@ type UserRepository interface {
 	Insert(user *domain.User) (*domain.User, error)
 	Find(id string) (*domain.User, error)
 	Update(user *domain.User) (*domain.User, error)
+	Delete(id string) error
 }
 
 type UserRepositoryDb struct {
