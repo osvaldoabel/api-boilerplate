@@ -8,13 +8,13 @@ services:
     volumes:
       - .:/go/src/
     ports:
-      - "8888:8888"
+      - "8888:80"
 
   vma.db:
     container_name: 'vma.db'
     build: ./.docker/mysql
     volumes:
-      - ./.docker/mysql/dbdata:/var/lib/mysql
+      - ./.docker/mysql/dbdata/:/var/lib/mysql
 
     environment:
       - MYSQL_ROOT_USER=root
