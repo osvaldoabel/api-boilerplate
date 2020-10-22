@@ -1,0 +1,24 @@
+version: '3'
+
+services: 
+
+  vma.app:
+    container_name: 'vma.app'
+    build: ./.docker/app/
+    volumes:
+      - .:/go/src/
+    ports:
+      - "8888:80"
+
+  vma.db:
+    container_name: 'vma.db'
+    build: ./.docker/mysql
+    volumes:
+      - ./.docker/mysql/dbdata/:/var/lib/mysql
+
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=verifymyage
+    ports:
+      - "3308:3306"
