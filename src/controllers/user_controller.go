@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"osvaldoabel/users-api/src/domain"
+	"osvaldoabel/users-api/src/repositories"
 	"osvaldoabel/users-api/src/services"
 	"osvaldoabel/users-api/utils"
 )
@@ -16,6 +16,7 @@ func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	payload := &utils.UserPayload{}
 	err := json.NewDecoder(r.Body).Decode(&payload)
+	defer r.Body.Close()
 
 	if err != nil {
 		log.Println(err.Error())
@@ -28,15 +29,21 @@ func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	uService.Insert(payload)
 
 	w.Header().Set("Content-Type", "application/json")
-	// w.Write([])
-
 }
 
 func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
+	params := map[string]string{}
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 28, "123456")
+	params["Limit"] = r.URL.Query().Get("per_page")
+	params["Offset"] = r.URL.Query().Get("page")
+	params["OrderBy"] = r.URL.Query().Get("order_by")
 
-	result, err := json.Marshal(user)
+	uService := services.NewUserService()
+	uService.UserRepository = repositories.NewUserRepository()
+
+	users := uService.All(params)
+
+	result, err := json.Marshal(users)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -12,6 +12,7 @@ type UserRepository interface {
 	Insert(user *domain.User) (*domain.User, error)
 	Find(id string) (*domain.User, error)
 	Update(user *domain.User) (*domain.User, error)
+	All(params map[string]string) []*domain.User
 	Delete(id string) error
 }
 
@@ -27,7 +28,6 @@ type UserRepositoryDb struct {
 **/
 func NewUserRepository() *UserRepositoryDb {
 	db := database.NewDbConnection()
-	// defer db.Close()
 
 	return &UserRepositoryDb{Db: db}
 }
@@ -66,14 +66,21 @@ func (repository *UserRepositoryDb) Update(user *domain.User) (*domain.User, err
 }
 
 func (repository *UserRepositoryDb) Find(id string) (*domain.User, error) {
-	var user domain.User
+	var user *domain.User
 	repository.Db.Preload("user").First(&user, "id = ?", id)
 
 	if user.ID == "" {
 		return nil, fmt.Errorf("This User doesn't exist.")
 	}
 
-	return &user, nil
+	return user, nil
+}
+
+func (repository *UserRepositoryDb) All(params map[string]string) []*domain.User {
+	var users []*domain.User
+
+	repository.Db.Limit(params["Limit"]).Offset(params["Offset"]).Order("created_at DESC", true).Find(&users)
+	return users
 }
 
 func (repository *UserRepositoryDb) Delete(id string) error {
