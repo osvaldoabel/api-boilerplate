@@ -3,6 +3,7 @@ package repositories
 import (
 	"fmt"
 	"osvaldoabel/users-api/src/domain"
+	"osvaldoabel/users-api/utils/database"
 
 	"github.com/jinzhu/gorm"
 )
@@ -24,7 +25,10 @@ type UserRepositoryDb struct {
 
 	Return: connection *gorm.DB
 **/
-func NewUserRepository(db *gorm.DB) *UserRepositoryDb {
+func NewUserRepository() *UserRepositoryDb {
+	db := database.NewDbConnection()
+	// defer db.Close()
+
 	return &UserRepositoryDb{Db: db}
 }
 

@@ -7,23 +7,14 @@ import (
 	"osvaldoabel/users-api/src/domain"
 	"osvaldoabel/users-api/src/services"
 	"osvaldoabel/users-api/utils"
-
-	"github.com/fatih/structs"
 )
 
 type UserController struct {
 }
 
-type UserPayload struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
-	Status   string `json:"status"`
-}
-
 func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
-	payload := &UserPayload{}
+	payload := &utils.UserPayload{}
 	err := json.NewDecoder(r.Body).Decode(&payload)
 
 	if err != nil {
@@ -33,20 +24,17 @@ func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.Dd(payload, true)
 	uService := services.NewUserService()
-	uService.Insert(structs.Map(payload))
+	uService.Insert(payload)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(payload)
+	// w.Write([])
 
 }
 
 func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 
-	// user := domain.User{"Alex", []string{"snowboarding", "programming"}}
-
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 28, "123456")
 
 	result, err := json.Marshal(user)
 
