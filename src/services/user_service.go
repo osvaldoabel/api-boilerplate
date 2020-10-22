@@ -43,6 +43,10 @@ func (u *UserService) Update(user *domain.User) error {
 	return nil
 }
 
+func (u *UserService) All(params map[string]string) []*domain.User {
+	return u.UserRepository.All(params)
+}
+
 func (u *UserService) Delete(id string) error {
 	err := u.UserRepository.Delete(id)
 
