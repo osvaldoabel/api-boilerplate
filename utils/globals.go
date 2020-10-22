@@ -8,3 +8,7 @@ type UserPayload struct {
 	Age      int    `json:"age"`
 	Status   string `json:"status"`
 }
+type DefaultQueryString struct {
+	Limit  string `json:"per_page"`
+	Offset string `json:"page"`
+}

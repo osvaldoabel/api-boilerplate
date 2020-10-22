@@ -1,11 +1,13 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"osvaldoabel/users-api/src/domain"
 	"strconv"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
@@ -23,11 +25,41 @@ type Database struct {
 }
 
 func init() {
-	godotenv.Load("./../../.env")
+	godotenv.Load("./../src/.env")
 }
 
 func NewDb() *Database {
 	return &Database{}
+}
+
+/**
+	Description: Create new Connection for test env.
+	Return: connection *gorm.DB
+**/
+func NewDbConnection() *gorm.DB {
+	db := NewDb()
+	db.DbType = os.Getenv("DB_TYPE")
+	db.Dsn = os.Getenv("DSN")
+	autoMigrateDb, err := strconv.ParseBool(os.Getenv("AUTO_MIGRATE_DB"))
+
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	db.AutoMigrateDb = autoMigrateDb
+
+	debugMode, err := strconv.ParseBool(os.Getenv("DEBUG"))
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+	db.Debug = debugMode
+
+	connection, err := db.Connect()
+
+	if err != nil {
+		log.Fatalf("[%v] db error: %v", db.Env, err)
+	}
+
+	return connection
 }
 
 /**
@@ -42,13 +74,13 @@ func NewDbTest() *gorm.DB {
 	db.AutoMigrateDb = true
 	db.Debug = true
 
-	conn, err := db.Connect()
+	connection, err := db.Connect()
 
 	if err != nil {
 		log.Fatalf("[%v] db error: %v", db.Env, err)
 	}
 
-	return conn
+	return connection
 }
 
 /**
@@ -73,6 +105,8 @@ func (d *Database) Connect() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	fmt.Println(os.Getenv("DEBUG"))
 
 	debugMode, err := strconv.ParseBool(os.Getenv("DEBUG"))
 

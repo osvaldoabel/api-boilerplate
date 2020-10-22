@@ -15,7 +15,7 @@ var (
 type Headers map[string]string
 
 func init() {
-	port = 8889
+	port = 80
 	baseURL = fmt.Sprintf("http://localhost:%d", port)
 }
 
