@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"osvaldoabel/users-api/src/presenters"
@@ -14,23 +15,41 @@ import (
 type UserController struct {
 }
 
-func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
-
+func getUserPayloads(r *http.Request) (*utils.UserPayload, error) {
 	payload := &utils.UserPayload{}
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	defer r.Body.Close()
 
 	if err != nil {
 		log.Println(err.Error())
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Proplem with the payload"))
-		return
+		return nil, err
+	}
+
+	return payload, nil
+}
+
+func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
+
+	payload, err := getUserPayloads(r)
+	if err != nil {
+		utils.JsonResponse(w, nil, 400)
 	}
 
 	uService := services.NewUserService()
-	uService.Insert(payload)
+	user, err := uService.Insert(payload)
 
-	w.Header().Set("Content-Type", "application/json")
+	if err != nil {
+		utils.JsonResponse(w, nil, 500)
+		return
+	}
+
+	result, err := json.Marshal(presenters.ToArray(user))
+	if err != nil {
+		utils.JsonResponse(w, nil, 500)
+		return
+	}
+
+	utils.JsonResponse(w, result, 200)
 }
 
 func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
@@ -64,8 +83,8 @@ func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 }
 
 func (u *UserController) Show(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
 
+	params := mux.Vars(r)
 	result := []byte{}
 
 	uService := services.NewUserService()
@@ -86,6 +105,24 @@ func (u *UserController) Show(w http.ResponseWriter, r *http.Request) {
 		utils.JsonResponse(w, result, 404)
 		return
 	}
+
+	utils.JsonResponse(w, result, 200)
+}
+
+func (u *UserController) Update(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	result := []byte{}
+
+	uService := services.NewUserService()
+	userPayload, err := getUserPayloads(r)
+	fmt.Println(err)
+	if err != nil {
+		utils.JsonResponse(w, nil, 400)
+		return
+	}
+
+	user, err := uService.Update(params["id"], userPayload)
+	result, err = json.Marshal(presenters.ToArray(user))
 
 	utils.JsonResponse(w, result, 200)
 }

@@ -26,8 +26,8 @@ type DefaultQueryString struct {
 	Offset string `json:"page"`
 }
 
-func JsonResponse(w http.ResponseWriter, data []byte, status_code int) {
+func JsonResponse(w http.ResponseWriter, data []byte, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status_code)
+	w.WriteHeader(statusCode)
 	w.Write(data)
 }

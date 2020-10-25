@@ -11,19 +11,24 @@ import (
 
 	@return: userCollection
 */
-func ToArray(items []*domain.User) []*utils.UserCollection {
+func ToCollection(items []*domain.User) []*utils.UserCollection {
 	var userCollection []*utils.UserCollection
 
 	for _, item := range items {
-		userCollection = append(userCollection, &utils.UserCollection{
-			ID:      item.ID,
-			Name:    item.Email,
-			Email:   item.Email,
-			Address: item.Address,
-			Age:     item.Age,
-			Status:  item.Status,
-		})
+		userCollection = append(userCollection, ToArray(item))
 	}
 
 	return userCollection
+}
+
+func ToArray(item *domain.User) *utils.UserCollection {
+
+	return &utils.UserCollection{
+		ID:      item.ID,
+		Name:    item.Email,
+		Email:   item.Email,
+		Address: item.Address,
+		Age:     item.Age,
+		Status:  item.Status,
+	}
 }
