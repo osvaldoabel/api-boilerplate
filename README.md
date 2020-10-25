@@ -122,17 +122,21 @@ curl -X GET http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec4c 
 curl -X DELETE http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec4c -H 'Content-Type: application/json'
 ```
 
-
 # To DO
 - Authentication
 - More [Advanced Logging system]()
  **NOTE:** It Would be interesting if we store our logs into Elasticsearch. 
  Q: How would it be?
- A: We send each log into a RabbitMq queue (or another messaging system) and let a command service just save it to elasticsearch.
+ A: We send each log into a RabbitMq queue (or another messaging system) then another service (a logger microservice) retrieves it and just save it to elasticsearch.
  **pros**: 
  . You can serve as many microservice you'll need
  . You'll have an Asynchronous system (very good most of time. )
+ . etc.
  **Cons**: 
  . Increases project complexity
+
+ **NOTE 2**
+This is just a hypothetical scenarios. 
+If your project will not grow to this magnitude, you don't need to implement this way.
 
 Developed by [Osvaldo Abel](https://gitlab.com/osvaldoabel)
