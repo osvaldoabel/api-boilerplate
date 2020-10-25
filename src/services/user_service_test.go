@@ -2,8 +2,8 @@ package services_test
 
 import (
 	"osvaldoabel/users-api/src/domain"
-	"osvaldoabel/users-api/src/repositories"
 	"osvaldoabel/users-api/src/services"
+	"osvaldoabel/users-api/utils"
 	"osvaldoabel/users-api/utils/database"
 	"testing"
 
@@ -12,60 +12,76 @@ import (
 
 func TestUserServiceInsert(t *testing.T) {
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 30, "123456")
 	require.Nil(t, err)
+	require.NotNil(t, user)
 
 	db := database.NewDbTest()
 	defer db.Close()
 
 	userService := services.NewUserService()
-	userService.User = user
-	userService.UserRepository = repositories.NewUserRepository(db)
 
-	err = userService.Insert()
+	payload := &utils.UserPayload{
+		Name:     "Osvaldo Abel",
+		Email:    "teste@example.com",
+		Status:   "active",
+		Address:  "My  Street , 15-30",
+		Age:      15,
+		Password: "123456",
+	}
+
+	user, err = userService.Insert(payload)
 	require.Nil(t, err)
 }
 
 func TestUserServiceUpdate(t *testing.T) {
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
-	require.Nil(t, err)
+	payload := &utils.UserPayload{
+		Name:     "Osvaldo Abel",
+		Email:    "teste@example.com",
+		Status:   "active",
+		Address:  "My  Street , 15-30",
+		Age:      28,
+		Password: "123456",
+	}
 
 	db := database.NewDbTest()
 	defer db.Close()
 
 	userService := services.NewUserService()
-	userService.User = user
-	userService.UserRepository = repositories.NewUserRepository(db)
-
-	err = userService.Insert()
+	user, err := userService.Insert(payload)
 	require.Nil(t, err)
+	require.NotNil(t, user)
 
 	found, err := userService.UserRepository.Find(userService.User.ID)
-	userService.User.Name = "UPDATED - Osvaldo Abel"
-	userService.User.Address = "UPDATED - my new adderess"
-	userService.User.Email = "new.email@example.com"
-	found, err = userService.UserRepository.Update(userService.User)
+	found.Name = "UPDATED - Osvaldo Abel"
+	found.Address = "UPDATED - my new adderess"
+	found.Email = "new.email@example.com"
+
+	updated, err := userService.UserRepository.Update(found)
 	require.Nil(t, err)
-	require.NotEqual(t, found.CreatedAt, found.UpdatedAt)
-	require.Equal(t, found.ID, found.ID)
+	require.NotEqual(t, updated.CreatedAt, updated.UpdatedAt)
+	require.Equal(t, updated.ID, updated.ID)
 }
 func TestUserServiceDelete(t *testing.T) {
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
-	require.Nil(t, err)
-
 	db := database.NewDbTest()
 	defer db.Close()
 
-	userService := services.NewUserService()
-	userService.User = user
-	userService.UserRepository = repositories.NewUserRepository(db)
+	payload := &utils.UserPayload{
+		Name:     "Osvaldo Abel",
+		Email:    "teste@example.com",
+		Status:   "active",
+		Address:  "My  Street , 15-30",
+		Age:      30,
+		Password: "123456",
+	}
 
-	err = userService.Insert()
+	userService := services.NewUserService()
+	user, err := userService.Insert(payload)
 	require.Nil(t, err)
+	require.NotNil(t, user)
 
 	err = userService.Delete(userService.User.ID)
-
 	require.Nil(t, err)
 }

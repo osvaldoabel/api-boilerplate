@@ -14,10 +14,10 @@ func TestUserRepositoryDbInsert(t *testing.T) {
 	db := database.NewDbTest()
 	defer db.Close()
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 26, "123456")
 	require.Nil(t, err)
 
-	repo := repositories.NewUserRepository(db)
+	repo := repositories.NewUserRepository()
 	user, err = repo.Insert(user)
 
 	require.Nil(t, err)
@@ -28,10 +28,10 @@ func TestUserRepositoryDbUpdate(t *testing.T) {
 	db := database.NewDbTest()
 	defer db.Close()
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 26, "123456")
 	require.Nil(t, err)
 
-	repo := repositories.NewUserRepository(db)
+	repo := repositories.NewUserRepository()
 	user, err = repo.Insert(user)
 	require.Nil(t, err)
 
@@ -57,10 +57,10 @@ func TestUserRepositoryDbDelete(t *testing.T) {
 	db := database.NewDbTest()
 	defer db.Close()
 
-	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	user, err := domain.NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 26, "123456")
 	require.Nil(t, err)
 
-	repo := repositories.NewUserRepository(db)
+	repo := repositories.NewUserRepository()
 	user, err = repo.Insert(user)
 	require.Nil(t, err)
 

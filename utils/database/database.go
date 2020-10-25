@@ -1,7 +1,6 @@
 package database
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"osvaldoabel/users-api/src/domain"
@@ -25,7 +24,8 @@ type Database struct {
 }
 
 func init() {
-	godotenv.Load("./../src/.env")
+	godotenv.Load("/go/src/.env")
+
 }
 
 func NewDb() *Database {
@@ -105,8 +105,6 @@ func (d *Database) Connect() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(os.Getenv("DEBUG"))
 
 	debugMode, err := strconv.ParseBool(os.Getenv("DEBUG"))
 
