@@ -12,7 +12,8 @@ type UserService struct {
 }
 
 func NewUserService() UserService {
-	return UserService{}
+	// repo := repositories.NewUserRepository()
+	return UserService{UserRepository: repositories.NewUserRepository()}
 }
 
 func (u *UserService) Insert(payload *utils.UserPayload) (*domain.User, error) {

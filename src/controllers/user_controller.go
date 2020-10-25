@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"osvaldoabel/users-api/src/repositories"
+	"osvaldoabel/users-api/src/presenters"
 	"osvaldoabel/users-api/src/services"
 	"osvaldoabel/users-api/utils"
 )
@@ -35,24 +35,30 @@ func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 	params := map[string]string{}
 
 	params["Limit"] = r.URL.Query().Get("per_page")
+	if params["Limit"] == "" {
+		params["Limit"] = "10"
+	}
+
 	params["Offset"] = r.URL.Query().Get("page")
+	if params["Offset"] == "" {
+		params["Offset"] = "0"
+	}
+
 	params["OrderBy"] = r.URL.Query().Get("order_by")
+	if params["OrderBy"] == "" {
+		params["OrderBy"] = "ID"
+	}
 
 	uService := services.NewUserService()
-	uService.UserRepository = repositories.NewUserRepository()
-
 	users := uService.All(params)
-
-	result, err := json.Marshal(users)
+	results, err := json.Marshal(presenters.ToArray(users))
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Ops... Sorry, we have an Internal Server Error!", http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(result)
-	return
+	utils.JsonResponse(w, results, 200)
 }
 
 // func (u *UserController) Update(w http.ResponseWriter, r *http.Request) error {
