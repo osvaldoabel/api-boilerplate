@@ -4,9 +4,11 @@ services:
 
   vma.app:
     container_name: 'vma.app'
+    entrypoint: dockerize -template .docker/app/.env:.env ./.docker/app/entrypoint.sh
+
     build: ./.docker/app/
     volumes:
-      - .:/go/src/
+      - ./:/go/src/
     ports:
       - "8888:80"
 
