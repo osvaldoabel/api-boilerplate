@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"osvaldoabel/users-api/src/domain"
 	"osvaldoabel/users-api/src/repositories"
 	"osvaldoabel/users-api/utils"
@@ -81,11 +82,16 @@ func (u *UserService) Find(id string) (*domain.User, error) {
 }
 
 func (u *UserService) Delete(id string) error {
-	err := u.UserRepository.Delete(id)
+
+	found, err := u.UserRepository.Find(id)
 
 	if err != nil {
 		return err
 	}
 
-	return nil
+	if found.ID == "" {
+		return fmt.Errorf("This User doesn't exist.")
+	}
+
+	return u.UserRepository.Delete(id)
 }
