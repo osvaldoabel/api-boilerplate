@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"osvaldoabel/users-api/src/presenters"
@@ -37,7 +36,6 @@ func (u *UserController) Create(w http.ResponseWriter, r *http.Request) {
 
 	uService := services.NewUserService()
 	user, err := uService.Insert(payload)
-
 	if err != nil {
 		utils.JsonResponse(w, nil, 500)
 		return
@@ -72,8 +70,8 @@ func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 
 	uService := services.NewUserService()
 	users := uService.All(params)
-	results, err := json.Marshal(presenters.ToCollection(users))
 
+	results, err := json.Marshal(presenters.ToCollection(users))
 	if err != nil {
 		http.Error(w, "Ops... Sorry, we have an Internal Server Error!", http.StatusInternalServerError)
 		return
@@ -88,21 +86,20 @@ func (u *UserController) Show(w http.ResponseWriter, r *http.Request) {
 	result := []byte{}
 
 	uService := services.NewUserService()
+
 	user, err := uService.Find(params["id"])
 	if err != nil {
 		utils.JsonResponse(w, result, 400)
 		return
 	}
-
-	result, err = json.Marshal(presenters.ToArray(user))
-
-	if err != nil {
-		utils.JsonResponse(w, result, 400)
+	if user.ID == "" {
+		utils.JsonResponse(w, result, 404)
 		return
 	}
 
-	if result == nil {
-		utils.JsonResponse(w, result, 404)
+	result, err = json.Marshal(presenters.ToArray(user))
+	if err != nil {
+		utils.JsonResponse(w, result, 400)
 		return
 	}
 
@@ -111,22 +108,31 @@ func (u *UserController) Show(w http.ResponseWriter, r *http.Request) {
 
 func (u *UserController) Update(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	result := []byte{}
 
 	uService := services.NewUserService()
 	userPayload, err := getUserPayloads(r)
-	fmt.Println(err)
+
 	if err != nil {
 		utils.JsonResponse(w, nil, 400)
 		return
 	}
 
 	user, err := uService.Update(params["id"], userPayload)
-	result, err = json.Marshal(presenters.ToArray(user))
+	result, err := json.Marshal(presenters.ToArray(user))
 
 	utils.JsonResponse(w, result, 200)
 }
 
-// func (u *UserController) Delete(w http.ResponseWriter, r *http.Request) {
+func (u *UserController) Delete(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	uService := services.NewUserService()
+	err := uService.Delete(params["id"])
 
-// }
+	statusCode := 204
+
+	if err != nil {
+		statusCode = 404
+	}
+
+	utils.JsonResponse(w, nil, statusCode)
+}
