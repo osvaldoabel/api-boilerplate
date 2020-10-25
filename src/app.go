@@ -16,8 +16,8 @@ func Start() {
 
 	router.HandleFunc("/users", userController.All).Methods("GET")
 	router.HandleFunc("/users", userController.Create).Methods("POST")
-	router.HandleFunc("/users/{id}", userController.Show).Methods("GET") //show
-	// router.HandleFunc("/users/{id}/update", userController.Update).Methods("PUT") //update
+	router.HandleFunc("/users/{id}", userController.Show).Methods("GET")          //show
+	router.HandleFunc("/users/{id}/update", userController.Update).Methods("PUT") //update
 	// router.HandleFunc("/users/{id}", UserController.Delete).Methods("DELETE")     //delete
 
 	http.Handle("/", router)

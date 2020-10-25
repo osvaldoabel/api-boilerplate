@@ -33,14 +33,37 @@ func (u *UserService) Insert(payload *utils.UserPayload) (*domain.User, error) {
 	return user, nil
 }
 
-func (u *UserService) Update(user *domain.User) error {
-	_, err := u.UserRepository.Update(u.User)
-
+func (u *UserService) Update(id string, payload *utils.UserPayload) (*domain.User, error) {
+	user, err := u.UserRepository.Find(id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	if payload.Name != "" {
+		user.Name = payload.Name
+	}
+	if payload.Email != "" {
+		user.Email = payload.Email
+	}
+	if payload.Status != "" {
+		user.Status = payload.Status
+	}
+	if payload.Address != "" {
+		user.Address = payload.Address
+	}
+	if payload.Age >= 0 {
+		user.Age = payload.Age
+	}
+	if payload.Password != "" {
+		user.Password = payload.Password
+	}
+
+	user, err = u.UserRepository.Update(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (u *UserService) All(params map[string]string) []*domain.User {
