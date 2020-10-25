@@ -12,7 +12,6 @@ type UserService struct {
 }
 
 func NewUserService() UserService {
-	// repo := repositories.NewUserRepository()
 	return UserService{UserRepository: repositories.NewUserRepository()}
 }
 
@@ -46,6 +45,16 @@ func (u *UserService) Update(user *domain.User) error {
 
 func (u *UserService) All(params map[string]string) []*domain.User {
 	return u.UserRepository.All(params)
+}
+
+func (u *UserService) Find(id string) (*domain.User, error) {
+	user, err := u.UserRepository.Find(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (u *UserService) Delete(id string) error {

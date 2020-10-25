@@ -66,14 +66,14 @@ func (repository *UserRepositoryDb) Update(user *domain.User) (*domain.User, err
 }
 
 func (repository *UserRepositoryDb) Find(id string) (*domain.User, error) {
-	var user *domain.User
-	repository.Db.Preload("user").First(&user, "id = ?", id)
+	var user domain.User
+	repository.Db.Find(&user, "id=?", id)
 
 	if user.ID == "" {
 		return nil, fmt.Errorf("This User doesn't exist.")
 	}
 
-	return user, nil
+	return &user, nil
 }
 
 func (repository *UserRepositoryDb) All(params map[string]string) []*domain.User {
@@ -85,7 +85,7 @@ func (repository *UserRepositoryDb) All(params map[string]string) []*domain.User
 
 func (repository *UserRepositoryDb) Delete(id string) error {
 	var user domain.User
-	result := repository.Db.Preload("user").Delete(&user, "id = ?", id)
+	result := repository.Db.Delete(&user, "id = ?", id)
 
 	if result.RowsAffected == 0 {
 		return fmt.Errorf("This user doesn't exist")

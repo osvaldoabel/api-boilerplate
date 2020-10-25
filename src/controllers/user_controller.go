@@ -7,6 +7,8 @@ import (
 	"osvaldoabel/users-api/src/presenters"
 	"osvaldoabel/users-api/src/services"
 	"osvaldoabel/users-api/utils"
+
+	"github.com/gorilla/mux"
 )
 
 type UserController struct {
@@ -51,7 +53,7 @@ func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 
 	uService := services.NewUserService()
 	users := uService.All(params)
-	results, err := json.Marshal(presenters.ToArray(users))
+	results, err := json.Marshal(presenters.ToCollection(users))
 
 	if err != nil {
 		http.Error(w, "Ops... Sorry, we have an Internal Server Error!", http.StatusInternalServerError)
@@ -61,10 +63,33 @@ func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 	utils.JsonResponse(w, results, 200)
 }
 
-// func (u *UserController) Update(w http.ResponseWriter, r *http.Request) error {
+func (u *UserController) Show(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 
-// }
+	result := []byte{}
 
-// func (u *UserController) Delete(w http.ResponseWriter, r *http.Request) error {
+	uService := services.NewUserService()
+	user, err := uService.Find(params["id"])
+	if err != nil {
+		utils.JsonResponse(w, result, 400)
+		return
+	}
+
+	result, err = json.Marshal(presenters.ToArray(user))
+
+	if err != nil {
+		utils.JsonResponse(w, result, 400)
+		return
+	}
+
+	if result == nil {
+		utils.JsonResponse(w, result, 404)
+		return
+	}
+
+	utils.JsonResponse(w, result, 200)
+}
+
+// func (u *UserController) Delete(w http.ResponseWriter, r *http.Request) {
 
 // }
