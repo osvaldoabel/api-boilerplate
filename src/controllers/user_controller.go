@@ -77,6 +77,9 @@ func (u *UserController) All(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(users) == 0 {
+		results = []byte("[]")
+	}
 	utils.JsonResponse(w, results, 200)
 }
 
@@ -89,7 +92,7 @@ func (u *UserController) Show(w http.ResponseWriter, r *http.Request) {
 
 	user, err := uService.Find(params["id"])
 	if err != nil {
-		utils.JsonResponse(w, result, 400)
+		utils.JsonResponse(w, result, 404)
 		return
 	}
 	if user.ID == "" {

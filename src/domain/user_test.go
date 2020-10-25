@@ -25,17 +25,17 @@ func TestIfIdIsNotValidUUID(t *testing.T) {
 }
 
 func TestIfNotValidEmail(t *testing.T) {
-	_, err := NewUser("Osvaldo Abel", "wrong.com", "active", "Street 1 15-30", "123456")
+	_, err := NewUser("Osvaldo Abel", "wrong.com", "active", "Street 1 15-30", 10, "123456")
 	require.Error(t, err)
 }
 
 func TestNewUser(t *testing.T) {
-	_, err := NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", "123456")
+	_, err := NewUser("Osvaldo Abel", "teste@example.com", "active", "My  Street , 15-30", 15, "123456")
 	require.Nil(t, err)
 }
 
 func TestUpdateUser(t *testing.T) {
-	user, err := NewUser("Osvaldo Abel", "teste@example.com", "active", "Street 1 15-30", "123456")
+	user, err := NewUser("Osvaldo Abel", "teste@example.com", "active", "Street 1 15-30", 30, "123456")
 	require.Nil(t, err)
 
 	newName := "Osvaldo Abel updated"

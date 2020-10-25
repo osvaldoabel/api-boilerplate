@@ -11,7 +11,7 @@
 # Introduction
  In this repository, we have everything we need to run this **User Api** project using [docker containers](http://docker.com). Below you can see a basic guide to learn how to run it in your local environment.
 
-In this project we create an *API* using [hexagonal archiecture or plug & adptesr architecture]() resulting in a robust and flexible project. So it's  pretty simple to add new features, new Entities, etc. Including if we need to add a **console adapter**, the the **domain** and **application layers** will keep intact.
+In this project we create an *API* using [hexagonal archiecture or ports & adpters architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) resulting in a robust and flexible project. So it's  pretty simple to add new features, new Entities, etc. Including if we need to add a **console adapter**, the the **domain** and **application layers** will keep intact.
 
 ### Requirements
 
@@ -28,12 +28,16 @@ $ git clone https://gitlab.com/osvaldoabel/user-api project-name
 # Get into the cloned repo
 $ cd project-name
 
-# Build and start containers
-$ docker-compose up -d --build
+# Build and start containers, 
+$ docker-compose up -d --build 
+```
+ I recomend to have a look at [*.docker/app/entrypoint.sh*](./.docker/app/entrypoint.sh) file to understand that it can take a bit of time when starting the vma.app container, because it runs *Tests *, downloads every dependencies and finally runs the webserver.
 
+```bash
 # You can also verify containers status
 $ docker-compose ps
 ```
+
 This will output near to this:
 
 [![Build Status](./show-containers.png)]()
@@ -123,9 +127,11 @@ curl -X DELETE http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec
 ```
 
 # To DO
-- Authentication
+- Caching (With [redis](https://redis.io/) )
+- Authentication / Authorization
 - More [Advanced Logging system]()
- **NOTE:** It Would be interesting if we store our logs into Elasticsearch. 
+
+**NOTE:** It Would be interesting if we persisted our logs into Elasticsearch. 
  Q: How would it be?
  A: We send each log into a RabbitMq queue (or another messaging system) then another service (a logger microservice) retrieves it and just save it to elasticsearch.
  **pros**: 

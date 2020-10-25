@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	godotenv.Load("./../src/.env")
+	godotenv.Load("/go/src/.env")
 }
 
 /**
