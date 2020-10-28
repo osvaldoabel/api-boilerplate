@@ -133,11 +133,11 @@ curl -X DELETE http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec
 
 **NOTE:** It Would be interesting if we persisted our logs into Elasticsearch. 
  Q: How would it be?
- A: We send each log into a RabbitMq queue (or another messaging system) then another service (a logger microservice) retrieves it and just save it to elasticsearch.
- **pros**: 
+ A: We send each log into a RabbitMq queue (or another messaging system) then another service (a logger microservice) retrieves it and just save it to elasticsearch.  
+ **pros**:  
  . You can serve as many microservice you'll need
  . You'll have an Asynchronous system (very good most of time. )
- . etc.
+ . etc.  
  **Cons**: 
  . Increases project complexity
 
