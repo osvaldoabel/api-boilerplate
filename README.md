@@ -2,10 +2,10 @@
 
 [![Build Status](./build-passing.svg)]()
 
-[Introduction](#introduction)
-[Project Requirements](#requirements)
-[Api Endoints](#api-endpoints)
-[TO DO](#todo)
+. [Introduction](#introduction)  
+. [Project Requirements](#requirements)  
+. [Api Endoints](#api-endpoints)  
+. [TO DO](#to-do)  
 
 
 # Introduction
@@ -40,7 +40,7 @@ $ docker-compose ps
 
 This will output near to this:
 
-[![Build Status](./show-containers.png)]()
+[![Build Status](./show-containers.png)]() 
 
 ```bash
   # get into vma.app to do anything you might need
