@@ -11,7 +11,7 @@
 # Introduction
  In this repository, we have everything we need to run this **User Api** project using [docker containers](http://docker.com). Below you can see a basic guide to learn how to run it in your local environment.
 
-In this project we create an *API* using [hexagonal archiecture or ports & adpters architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) resulting in a robust and flexible project. So it's  pretty simple to add new features, new Entities, etc. Including if we need to add a **console adapter**, the the **domain** and **application layers** will keep intact.
+In this project we create an *API* using [hexagonal archiecture or ports & adpters architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) resulting in a robust and flexible project. So it's  pretty simple to add new features, new Entities, etc. Including if we need to add a **console adapter**, the **application layers** will keep intact.
 
 ### Requirements
 
